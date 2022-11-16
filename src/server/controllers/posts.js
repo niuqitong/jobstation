@@ -39,7 +39,7 @@ export const getPostsBySearch = async (req, res) => {
             targetPosts[i].creatorName = creator.username;
         }
 
-        console.log(targetPosts);
+        // console.log(targetPosts);
         res.status(200).json(targetPosts);
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -57,14 +57,14 @@ export const getRecommendedPosts = async (req, res) => {
             return new Promise(resolve => setTimeout(resolve, time));
         }
         await delay(300);
-        console.log("RelatedContentsIds")
-        console.log(RelatedContentsIds.length)
+        // console.log("RelatedContentsIds")
+        // console.log(RelatedContentsIds.length)
 
         const RecommendRst = RelatedContentsIds.concat(RecommendedContentIds);
 
-        console.log(RecommendRst)
+        // console.log(RecommendRst)
         const targetPosts = await Post.find({ _id: { "$in": RecommendRst } });
-        console.log(targetPosts.length)
+        // console.log(targetPosts.length)
 
         // if( targetPosts.length < 20 ){
 
@@ -86,7 +86,7 @@ export const createPost = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(creator)) return res.status(404).send(`No user with id: ${creator}`);
     try {
         const newPost = await Post.createPost({ title, message, creator, tags });
-        console.log("postId: ", newPost.id),
+        // console.log("postId: ", newPost.id),
         await createPostEvent(newPost.id, newPost.tags, newPost.creator);
         await newPost.save();
         res.status(201).json(newPost);
@@ -190,7 +190,7 @@ export const createComment = async (req, res) => {
     const { postId, userId, message } = req.body;
     if (!mongoose.Types.ObjectId.isValid(postId)) return res.status(404).send(`No post with id: ${postId}`);
     if (!mongoose.Types.ObjectId.isValid(userId)) return res.status(404).send(`No user with id: ${userId}`);
-    console.log(message, userId);
+    // console.log(message, userId);
     const newComment = await Comment.create({ message, creator: userId });
     const post = await Post.findById(postId);
     const updatedPost = await Post.findByIdAndUpdate(

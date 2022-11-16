@@ -53,7 +53,7 @@ export const getGroupByUser = async (req, res) => {
 
 export const createGroup = async (req, res) => {
     const { groupName, groupIntro, tags, owner } = req.body;
-    console.log('tag in controller create');
+    // console.log('tag in controller create');
     
     try {
         const newGroup = await Group.createGroup({
@@ -70,7 +70,7 @@ export const createGroup = async (req, res) => {
             owner,
             creator
         );
-        console.log(newGroup);
+        // console.log(newGroup);
         await createGroupEvent(newGroup.id, newGroup.tags, newGroup.owner);
         res.status(201).json(newGroup);
     } catch (error) {
@@ -81,13 +81,13 @@ export const createGroup = async (req, res) => {
 export const joinGroup = async (req, res) => {
     try {
         const { groupId, userId } = req.body;
-        console.log(`join group: ${groupId}, ${userId}`);
+        // console.log(`join group: ${groupId}, ${userId}`);
         const targetGroup = await Group.findById(groupId);
         let updated = targetGroup;
         if (targetGroup.members.includes(userId))
             res.status(200).json("already in, unable to join");
         else {
-            console.log(updated)
+            // console.log(updated)
 
 
             updated.memberCount += 1;
@@ -99,7 +99,7 @@ export const joinGroup = async (req, res) => {
                     members: updated.members
                 },
             );
-            console.log(updatedGroup)
+            // console.log(updatedGroup)
 
             let targetUser = await User.findById(userId);
             targetUser.groups.push(groupId);
@@ -184,7 +184,7 @@ export const updateGroup = async (req, res) => {
         return res.status(404).send(`No group with id: ${id}`);
     const updatedGroup = { groupName, owner, tags, groupIntro, avatar };
     let resGroup = await Group.findByIdAndUpdate(id, updatedGroup, { new: true });
-    console.log(resGroup);
+    // console.log(resGroup);
     return res.status(200).json(resGroup);
 };
 
