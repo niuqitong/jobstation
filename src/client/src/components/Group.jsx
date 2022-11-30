@@ -13,16 +13,29 @@ export default function Group(props) {
     const [recommendedGroups, setRecommmendedGroups] = useState([]);
     useEffect(() => {
         if (!isLoggedIn(user)) return;
+        let joined = [];
         fetch(`${API_URL}/group/${user._id}`)
             .then((res) => res.json())
             .then((fetched) => {
                 setGroups(fetched);
+                joined = fetched;
             });
         fetch(`${API_URL}/group/user/${user._id}`)
             .then((res) => res.json())
             .then((fetched) => {
-                console.log(fetched)
-                setRecommmendedGroups(fetched);
+                // console.log(fetched)
+                // if (joined.length === 0)
+                //     console.log("0 joined");
+                // setRecommmendedGroups(fetched);
+                // console.log(joined[1]);
+                // console.log('gg')
+                const joined_ids = joined.map(group => group._id);
+                // const rec_ids = fetched.map(group => group._id);
+                // console.log(fetched[0] === joined[1]);
+                // if (joined[1] === fetched[1])
+                const rec = fetched.filter(group => !joined_ids.includes(group._id) );
+                // console.log(rec)
+                setRecommmendedGroups(rec);
             });
         
     }, []);
